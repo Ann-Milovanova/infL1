@@ -13,11 +13,9 @@ if sub_array:
     min_in_sub = min(sub_array)
     min_index_in_sub = sub_array.index(min_in_sub) + max_index + 1
     arr[max_index], arr[min_index_in_sub] = arr[min_index_in_sub], arr[max_index]
-
 print(arr)
 
 #№12ур3 Из массива, размером 12 удалить все отрицательные элементы
 arr = [5, -3, 8, -1, 0, 7, -6, 4, -9, 2, -8, 6]
 arr = [x for x in arr if x >= 0]
-
 print(arr)
