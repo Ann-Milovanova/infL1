@@ -1,3 +1,4 @@
+№2ур1
 print('Введите длины сторон треугольников ')
 from math import sqrt
 a1=int(input())
@@ -17,4 +18,14 @@ if result1>result2:
     print('Первый треугольник больше ')
 if result1<result2:
     print('Второй треугольник больше ')
+    
+№24ур1
+import random
+A = [[random.randint(-10, 10) for _ in range(3)] for _ in range(3)]
+B = [[random.randint(-10, 10) for _ in range(3)] for _ in range(3)]
+print('Ваши матрицы: ', A, B)
+d_A = [A[i][i] for i in range(len(A))]
+d_B = [B[i][i] for i in range(len(B))]
+print(d_A, d_B)
+def 
 
