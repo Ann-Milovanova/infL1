@@ -8,15 +8,9 @@ for r in A:
 m=[]
 for i in A:
     for j in i:
-        if j>0:
+        if j<0:
             m.append(j)
-print("Новый массив: ", m)
-m=[]
-for i in A:
-    for j in i:
-        if j>0:
-            m.append(j)
-print("Новый массив: ", m)
+print(m)
 #ур2№2 Дана матрица A размера 7 × 5. Если количество положительных элементов столбца больше количества отрицательных, то максимальный элемент этого столбца заменить на 0, в противном случае максимальный элемент заменить на номер максимального элемента этого столбца
 import random
 A = [[random.randint(-10, 10) for _ in range(5)] for _ in range(7)]
@@ -58,3 +52,28 @@ for i in range(len(m)):
     m[i][0]=0
     m[i][len(m)-1]=0
 print(m)
+#ур1№30 В строку, содержащую максимальный элемент главной диагонали матрицы В размером 5х5 поменять местами со строкой, содержащей первый (от начала столбца) отрицательный элемент в 3-м столбце
+import random
+B = [[random.randint(-10, 10) for _ in range(5)] for _ in range(5)]
+print("Исходная матрица B:")
+for r in B:
+    print(r)
+max = B[0][0]
+max_ind = 0
+
+for i in range(5):
+    if B[i][i] > max:
+        max = B[i][i]
+        max_ind = i
+negative_ind = -1
+
+for i in range(5):
+    if B[i][2] < 0:  
+        negative_ind = i
+        break
+if negative_ind != -1:
+    B[max_ind], B[negative_ind] = B[negative_ind], B[max_ind]
+
+print("Обновленная матрица:")
+for r in B:
+    print(r)
