@@ -1,4 +1,4 @@
-№2ур1
+#№2ур1 Два треугольника заданы длинами своих сторон a, b, c. Определить треугольник с большей площадью, вычисляя площади по формуле Герона 
 print('Введите длины сторон треугольников ')
 from math import sqrt
 a1=int(input())
@@ -19,19 +19,19 @@ if result1>result2:
 if result1<result2:
     print('Второй треугольник больше ')
     
-№4ур1
-def find_max_on_diagonal(matrix):
-    max_element = matrix[0][0]
-    max_index = 0
+#№4ур1 Поменять местами строку матрицы А размером 5х5 и столбец матрицы В размером 5х5, содержащие максимальные элементы на диагоналях
+def max_diag(matrix):
+    mx = matrix[0][0]
+    mx_ind = 0
     for i in range(len(matrix)):
-        if matrix[i][i] > max_element:
-            max_element = matrix[i][i]
-            max_index = i
-    return max_element, max_index
+        if matrix[i][i] > mx:
+            mx = matrix[i][i]
+            mx_ind = i
+    return mx, mx_ind
 
-def swap_row_column(A, B):
-    max_A, row_index = find_max_on_diagonal(A)
-    max_B, col_index = find_max_on_diagonal(B)
+def s (A, B):
+    max_A, row_index = max_diag(A)
+    max_B, col_index = max_diag(B)
 
     for i in range(len(A)):
         A[row_index][i], B[i][col_index] = B[i][col_index], A[row_index][i]
@@ -42,21 +42,43 @@ import random
 A = [[random.randint(-10, 10) for _ in range(5)] for _ in range(5)]
 
 print("Матрица A:")
-for row in A:
-    print(row)
+for i in A:
+    print(i)
 
 B = [[random.randint(-10, 10) for _ in range(5)] for _ in range(5)]
-print("\nМатрица B:")
-for row in B:
-    print(row)
+print("Матрица B:")
+for i in B:
+    print(i)
 
-A, B = swap_row_column(A, B)
+A, B = s(A, B)
 
-print("\nМатрица A после замены:")
-for row in A:
-    print(row)
+print("Матрица A после замены:")
+for i in A:
+    print(i)
 
-print("\nМатрица B после замены:")
-for row in B:
-    print(row)
+print("Матрица B после замены:")
+for i in B:
+    print(i)
 
+#№2ур3 В заданной матрице расположить элементы чётных строк в порядке возрастания, а элементы нечётных строк - в порядке убывания. 
+def sort_matrix(matrix):
+    def sort_row(row, ascending=True):
+        return sorted(row, reverse=not ascending)
+
+    for index, row in enumerate(matrix):
+        if index % 2 == 0:
+            matrix[index] = sort_row(row, ascending=True)
+        else:
+            matrix[index] = sort_row(row, ascending=False)
+
+    return matrix
+
+import random
+matrix = [[random.randint(-10, 10) for _ in range(5)] for _ in range(5)]
+print("Матрица:")
+for i in matrix:
+    print(i)
+sorted_matrix = sort_matrix(matrix)
+print("Изменённая матрица: ")
+for i in sorted_matrix:
+    print(i)
