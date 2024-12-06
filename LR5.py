@@ -82,3 +82,27 @@ sorted_matrix = sort_matrix(matrix)
 print("Изменённая матрица: ")
 for i in sorted_matrix:
     print(i)
+#вот решённая задача с пары 6 декабря! 
+class Student:
+    def __init__(self, name, marks):
+        self.name = name
+        self.marks = marks
+
+    def avg_marks(self):
+        total = sum(self.marks)
+        return total / len(self.marks)
+
+
+anyaM = Student('Anya', [4, 5, 4, 3])
+OlegB = Student('Oleg', [3, 4, 5, 5])
+anyaF = Student('Anna', [5, 5, 4, 5])
+
+students = [anyaM, OlegB, anyaF]
+
+f = [student for student in students if student.avg_marks() >= 4]
+
+f.sort(key=lambda student: student.avg_marks(), reverse=True)
+
+print(f"{'Name':<10} {'Average Marks':<15}")
+for student in f:
+    print(f"{student.name:<10} {student.avg_marks():<15.2f}")
