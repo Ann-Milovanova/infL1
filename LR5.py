@@ -19,13 +19,44 @@ if result1>result2:
 if result1<result2:
     print('Второй треугольник больше ')
     
-№24ур1
+№4ур1
+def find_max_on_diagonal(matrix):
+    max_element = matrix[0][0]
+    max_index = 0
+    for i in range(len(matrix)):
+        if matrix[i][i] > max_element:
+            max_element = matrix[i][i]
+            max_index = i
+    return max_element, max_index
+
+def swap_row_column(A, B):
+    max_A, row_index = find_max_on_diagonal(A)
+    max_B, col_index = find_max_on_diagonal(B)
+
+    for i in range(len(A)):
+        A[row_index][i], B[i][col_index] = B[i][col_index], A[row_index][i]
+
+    return A, B
+
 import random
-A = [[random.randint(-10, 10) for _ in range(3)] for _ in range(3)]
-B = [[random.randint(-10, 10) for _ in range(3)] for _ in range(3)]
-print('Ваши матрицы: ', A, B)
-d_A = [A[i][i] for i in range(len(A))]
-d_B = [B[i][i] for i in range(len(B))]
-print(d_A, d_B)
-def 
+A = [[random.randint(-10, 10) for _ in range(5)] for _ in range(5)]
+
+print("Матрица A:")
+for row in A:
+    print(row)
+
+B = [[random.randint(-10, 10) for _ in range(5)] for _ in range(5)]
+print("\nМатрица B:")
+for row in B:
+    print(row)
+
+A, B = swap_row_column(A, B)
+
+print("\nМатрица A после замены:")
+for row in A:
+    print(row)
+
+print("\nМатрица B после замены:")
+for row in B:
+    print(row)
 
