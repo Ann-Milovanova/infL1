@@ -24,8 +24,6 @@ def find_average_without_extremes(matrix):
 
     return average_value
 
-
-
 A = [[random.randint(-10, 10) for _ in range(3)] for _ in range(3)]
 print("Исходная матрица А: ")
 for i in A:
@@ -40,7 +38,6 @@ C = [[random.randint(-10, 10) for _ in range(3)] for _ in range(3)]
 print("Исходная матрица C: ")
 for i in C:
     print(i)
-
 
 avg = []
 
