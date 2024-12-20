@@ -72,27 +72,46 @@ print("Полученные значения образуют:", sequence_type, 
 
 #лаба6(7) №4 Лыжные гонки проводятся отдельно для двух групп участников. Результаты соревнований заданы в виде фамилий участников и их результатов в каждой группе. Расположить результаты соревнований в каждой группе в порядке занятых мест. Объединить результаты обеих групп с сохранением упорядоченности и вывести в виде таблицы с заголовком.
 
-group1 = []
-n1 = int(input("Введите количество участников в первой группе: "))
-for _ in range(n1):
-    name, result = input("Введите фамилию участника и его результат (через пробел): ").split()
-    group1.append((name, int(result)))
-                  
-group2 = []
-n2 = int(input("Введите количество участников во второй группе: "))
-for _ in range(n2):
-    name, result = input("Введите фамилию участника и его результат (через пробел): ").split()
-    group2.append((name, int(result)))
+class Participant:
+    def __init__(self, name, result):
+        self.name = name
+        self.result = result
 
-group1.sort(key=lambda x: x[1])
-group2.sort(key=lambda x: x[1])
+def bubble_sort(participants):
+    n = len(participants)
+    for i in range(n):
+        for j in range(n - 1 - i):
+            if participants[j].result > participants[j + 1].result: 
+                participants[j], participants[j + 1] = participants[j + 1], participants[j]
 
-combined_results = group1 + group2
+def input_participants(group_name):
+    participants = []
+    n = int(input(f"Введите количество участников для группы {group_name}: "))
+    for _ in range(n):
+        name = input("Введите фамилию участника: ")
+        result = float(input("Введите результат участника: "))
+        participant = Participant(name, result)
+        participants.append(participant)
+    return participants
 
-combined_results.sort(key=lambda x: x[1])
+def main():
 
-print("\nРезультаты соревнований:")
-print("{:<20} {:<10}".format("Фамилия", "Результат"))
-print("-" * 30)
-for name, result in combined_results:
+    group1_participants = input_participants("1")
+    group2_participants = input_participants("2")
+
+    bubble_sort(group1_participants)
+    bubble_sort(group2_participants)
+
+    combined_participants = group1_participants + group2_participants
+
+    bubble_sort(combined_participants)
+
+    print("\nИтоговая таблица соревнований:")
+    print("{:<20} {:<10}".format("Фамилия", "Результат"))
+    print("-" * 30)
+    for participant in combined_participants:
+        print("{:<20} {:<10}".format(participant.name, participant.result))
+
+if __name__ == "__main__":
+    main()
     print("{:<20} {:<10}".format(name, result))
