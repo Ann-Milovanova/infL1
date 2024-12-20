@@ -70,65 +70,29 @@ else:
 print("Средние значения:", averages)
 print("Полученные значения образуют:", sequence_type, "последовательность.")
 
-#лаба6(7) №4
-class Participant:
-    def init(self, surname, result):
-        self.surname = surname
-        self.result = result
+#лаба6(7) №4 Лыжные гонки проводятся отдельно для двух групп участников. Результаты соревнований заданы в виде фамилий участников и их результатов в каждой группе. Расположить результаты соревнований в каждой группе в порядке занятых мест. Объединить результаты обеих групп с сохранением упорядоченности и вывести в виде таблицы с заголовком.
 
-    def repr(self):
-        return f"{self.surname}: {self.result}"
+group1 = []
+n1 = int(input("Введите количество участников в первой группе: "))
+for _ in range(n1):
+    name, result = input("Введите фамилию участника и его результат (через пробел): ").split()
+    group1.append((name, int(result)))
+                  
+group2 = []
+n2 = int(input("Введите количество участников во второй группе: "))
+for _ in range(n2):
+    name, result = input("Введите фамилию участника и его результат (через пробел): ").split()
+    group2.append((name, int(result)))
 
+group1.sort(key=lambda x: x[1])
+group2.sort(key=lambda x: x[1])
 
-class SkiRaceGroup:
-    def init(self, name):
-        self.name = name
-        self.participants = []
+combined_results = group1 + group2
 
-    def add_participant(self, surname, result):
-        participant = Participant(surname, result)
-        self.participants.append(participant)
+combined_results.sort(key=lambda x: x[1])
 
-    def sort_results(self):
-        self.participants.sort(key=lambda x: x.result)
-
-    def str(self):
-        return f"Group: {self.name}\n" + "\n".join(f"{index + 1}. {participant.surname} - {participant.result}" 
-                                                     for index, participant in enumerate(self.participants))
-
-
-class SkiRace:
-    def init(self):
-        self.groups = []
-
-    def add_group(self, group):
-        self.groups.append(group)
-
-    def display_results(self):
-        print("Соревнования по лыжным гонкам")
-        print("=" * 30)
-        for group in self.groups:
-            group.sort_results()
-            print(group)
-            print("-" * 30)
-
-
-# Пример использования
-if name == "main":
-    group1 = SkiRaceGroup("Группа 1")
-    group1.add_participant("Иванов", 15)
-    group1.add_participant("Петров", 10)
-    group1.add_participant("Сидоров", 12)
-
-    group2 = SkiRaceGroup("Группа 2")
-    group2.add_participant("Кузнецов", 9)
-    group2.add_participant("Смирнов", 14)
-    group2.add_participant("Попов", 11)
-
-    ski_race = SkiRace()
-    ski_race.add_group(group1)
-    ski_race.add_group(group2)
-
-    ski_race.display_results()
-
-
+print("\nРезультаты соревнований:")
+print("{:<20} {:<10}".format("Фамилия", "Результат"))
+print("-" * 30)
+for name, result in combined_results:
+    print("{:<20} {:<10}".format(name, result))
