@@ -1,39 +1,42 @@
 #ур1№1 Результаты соревнований по прыжкам в длину определяются по сумме двух попыток. В протоколе для каждого участника указываются: фамилия, общество, результаты первой и второй попыток. Вывести протокол в виде таблицы с заголовком в порядке занятых мест.
 class Participant:
-    def __init__(self, name, society, attempt1, attempt2):
-        self.name = name
+    def __init__(self, surname, society, attempt1, attempt2):
+        self.surname = surname
         self.society = society
         self.attempt1 = attempt1
         self.attempt2 = attempt2
-        self.total_score = self.calculate_total_score()
 
-    def calculate_total_score(self):
+    def total_score(self):
         return self.attempt1 + self.attempt2
 
-def bubble_sort(participants):
-    n = len(participants)
-    for i in range(n):
-        for j in range(n - 1 - i):
-            if participants[j].total_score < participants[j + 1].total_score:
-                participants[j], participants[j + 1] = participants[j + 1], participants[j]
+class Competition:
+    def __init__(self):
+        self.participants = []
 
-participants = []
-n = int(input("Введите количество участников: "))
-for _ in range(n):
-    name = input("Введите фамилию участника: ")
-    society = input("Введите общество участника: ")
-    attempt1 = float(input("Введите результат первой попытки: "))
-    attempt2 = float(input("Введите результат второй попытки: "))
-    participant = Participant(name, society, attempt1, attempt2)
-    participants.append(participant)
+    def add_participant(self, surname, society, attempt1, attempt2):
+        participant = Participant(surname, society, attempt1, attempt2)
+        self.participants.append(participant)
 
-bubble_sort(participants)
+    def sort_participants(self):
+        # Сортируем участников по сумме попыток в порядке убывания
+        for i in range(len(self.participants)):
+            for j in range(0, len(self.participants) - i - 1):
+                if self.participants[j].total_score() < self.participants[j + 1].total_score():
+                    # Меняем местами
+                    self.participants[j], self.participants[j + 1] = self.participants[j + 1], self.participants[j]
 
-print("\nПротокол соревнований:")
-print("{:<20} {:<20} {:<15} {:<15} {:<10}".format("Фамилия", "Общество", "Попытка 1", "Попытка 2", "Итого"))
-print("-" * 85)
-for participant in participants:
-    print("{:<20} {:<20} {:<15} {:<15} {:<10}".format(participant.name, participant.society, participant.attempt1, participant.attempt2, participant.total_score))
+    def display_results(self):
+        self.sort_participants()
+        print(f"{'Место':<6} {'Фамилия':<15} {'Общество':<15} {'1-я попытка':<15} {'2-я попытка':<15} {'Сумма':<15}")
+        for index, participant in enumerate(self.participants, start=1):
+            print(f"{index:<6} {participant.surname:<15} {participant.society:<15} {participant.attempt1:<15} {participant.attempt2:<15} {participant.total_score():<15}")
+
+competition = Competition()
+competition.add_participant("Милованова", "Спорт", 7.5, 8.0)
+competition.add_participant("Федотова", "Атлетика", 6.5, 7.0)
+competition.add_participant("Билявский", "Спорт", 8.0, 8.5)
+
+competition.display_results()
 
 #ур2№5 Соревнования по прыжкам на лыжах со 120-метрового трамплина оценивают 5 судей. Каждый судья выставляет оценку за стиль прыжка по 20-балльной шкале. Меньшая и большая оценки отбрасываются, остальные суммируются. К этой сумме прибавляются очки за дальность прыжка: 120 м – 60 очков, за каждый метр превышения добавляются по 2 очка, при меньшей дальности отнимаются 2 очка за каждый метр. Получить итоговую таблицу соревнований, содержащую фамилию и итоговый результат для каждого участника в порядке занятых мест.
 class Participant:
