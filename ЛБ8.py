@@ -1,3 +1,4 @@
+№9 для хранения текста в сжатом виде найти часто повторяющиеся последовательности из двух букв и заменить их кодом. В качестве кода использовать символы, не встречающиеся в тексте. Составить также таблицу кодов.
 from collections import Counter
 def find_repeated_pairs(text):
     pairs = [text[i:i + 2] for i in range(len(text) - 1)]
@@ -19,7 +20,7 @@ def compress_text(text, codes):
         compressed_text = compressed_text.replace(pair, code)
     return compressed_text
 def main():
-    text = "пример текста для сжатия текста, текст содержит часто повторяющиеся пары букв."
+    text = "Начался новый семестр."
 
     repeated_pairs = find_repeated_pairs(text)
     sorted_pairs = repeated_pairs.most_common()
