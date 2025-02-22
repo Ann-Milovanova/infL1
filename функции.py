@@ -1,3 +1,4 @@
+№13 (1)
 import numpy as np
 import matplotlib.pyplot as plt
 a = float(input("Введите коэффициент a: "))
@@ -16,4 +17,30 @@ plt.axhline(0, color='black',linewidth=0.5, ls='--')
 plt.axvline(0, color='black',linewidth=0.5, ls='--')
 plt.grid()
 plt.legend()
+plt.show()
+
+№13 (2)
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+x_values = []
+y_values = []
+
+with open("data.txt", "r") as file:
+    for line in file:
+        x, y = map(float, line.strip().split(','))
+        x_values.append(x)
+        y_values.append(y)
+x_values = np.array(x_values)
+y_values = np.array(y_values)
+
+plt.figure(figsize=(10, 6))
+plt.plot(x_values, y_values, marker='o', linestyle='-', color='blue')
+plt.title('График дискретных значений')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.axhline(0, color='black', linewidth=0.5, ls='--')
+plt.axvline(0, color='black', linewidth=0.5, ls='--')
+plt.grid()
 plt.show()
