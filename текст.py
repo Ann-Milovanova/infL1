@@ -1,3 +1,4 @@
+поменять местами максимальный элемент массива и минимальный элемент части массива, расположенный после максимального
 file_path = 'example.txt'
 with open(file_path, 'r') as file:
     array = list(map(int, file.readline().strip().split()))
