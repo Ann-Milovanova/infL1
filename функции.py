@@ -19,7 +19,7 @@ plt.grid()
 plt.legend()
 plt.show()
 
-№13 (2)
+№13 (2) Координаты точек есть в файле "data"
 
 import numpy as np
 import matplotlib.pyplot as plt
