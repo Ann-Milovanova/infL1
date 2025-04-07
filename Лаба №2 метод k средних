@@ -1,0 +1,82 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.widgets import Slider
+import random
+
+def generate_ring_data(n_points=20):
+    centers = [(2, 3), (7, 5), (5, 9)]
+    radii = [1.5, 2.0, 1.8]
+
+    x, y = [], []
+    for center, radius in zip(centers, radii):
+        for _ in range(n_points):
+            angle = random.uniform(0, 2 * np.pi)
+            r = random.uniform(radius * 0.8, radius * 1.2)
+            x.append(center[0] + r * np.cos(angle))
+            y.append(center[1] + r * np.sin(angle))
+    return np.array(x), np.array(y)
+
+def k_means(x, y, k=3, max_iter=100, tol=1e-4, stop_criterion=0):
+    points = np.column_stack((x, y))
+    n_points = len(x)
+
+    centroids = points[np.random.choice(n_points, k, replace=False)]
+    history = [centroids.copy()]
+    labels_history = []
+
+    for iteration in range(max_iter):
+
+        distances = np.sqrt(((points - centroids[:, np.newaxis]) ** 2).sum(axis=2))
+        labels = np.argmin(distances, axis=0)
+        labels_history.append(labels.copy())
+
+        new_centroids = np.array([points[labels == i].mean(axis=0) for i in range(k)])
+        if stop_criterion == 0 and iteration == max_iter - 1:
+            break
+        elif stop_criterion == 1 and np.all(
+                np.abs(new_centroids - centroids) < tol):
+            break
+        elif stop_criterion == 2 and iteration > 0 and np.array_equal(labels,
+                                                                      labels_history[-2]):
+            break
+
+        centroids = new_centroids
+        history.append(centroids.copy())
+
+    return labels, history, labels_history
+
+x, y = generate_ring_data(n_points=20)
+
+stop_criterion = 1
+
+labels, centroids_history, labels_history = k_means(x, y, k=3, stop_criterion=stop_criterion)
+
+fig, ax = plt.subplots(figsize=(10, 8))
+plt.subplots_adjust(bottom=0.25)
+
+scatter = ax.scatter(x, y, c=labels_history[-1], cmap='viridis')
+centroid_plot = ax.scatter(centroids_history[-1][:, 0], centroids_history[-1][:, 1],
+                           c='red', marker='X', s=200, alpha=0.7)
+
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_title(f'K-means Clustering (Iteration: {len(centroids_history) - 1})')
+
+ax_iter = plt.axes([0.2, 0.1, 0.65, 0.03])
+iter_slider = Slider(ax_iter, 'Iteration', 0, len(centroids_history) - 1,
+                     valinit=len(centroids_history) - 1, valstep=1)
+
+def update(val):
+    iteration = int(iter_slider.val)
+    current_centroids = centroids_history[iteration]
+    current_labels = labels_history[iteration]
+
+    scatter.set_array(current_labels)
+    centroid_plot.set_offsets(current_centroids)
+    ax.set_title(f'K-means Clustering (Iteration: {iteration})')
+    fig.canvas.draw_idle()
+
+
+iter_slider.on_changed(update)
+
+plt.show()
