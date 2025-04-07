@@ -1,112 +1,56 @@
 import random
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split as sk_train_test_split
-from sklearn.metrics import accuracy_score
 import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 
-def generate_data(pointsCount1=50, pointsCount2=50, 
-                 xMin1=0, xMax1=5, yMin1=0, yMax1=5,
-                 xMin2=3, xMax2=8, yMin2=3, yMax2=8):
 
-    x1 = [[random.uniform(xMin1, xMax1), random.uniform(yMin1, yMax1)] for _ in range(pointsCount1)]
-    y1 = [0] * pointsCount1
+def generate_points(count, x_min, x_max, y_min, y_max, label):
+    points = [[random.uniform(x_min, x_max), random.uniform(y_min, y_max)] for _ in range(count)]
+    labels = [label] * count
+    return points, labels
 
-    x2 = [[random.uniform(xMin2, xMax2), random.uniform(yMin2, yMax2)] for _ in range(pointsCount2)]
-    y2 = [1] * pointsCount2
+pointsCount1, pointsCount2 = 50, 50
+xMin1, xMax1, yMin1, yMax1 = 2, 5, 2, 5
+xMin2, xMax2, yMin2, yMax2 = 3, 10, 3, 10
 
-    x = x1 + x2
-    y = y1 + y2
-    
-    return x, y
+x1, y1 = generate_points(pointsCount1, xMin1, xMax1, yMin1, yMax1, 0)
+x2, y2 = generate_points(pointsCount2, xMin2, xMax2, yMin2, yMax2, 1)
 
-def custom_train_test_split(x, y, p=0.8):
+x = x1 + x2
+y = y1 + y2
 
-    data = list(zip(x, y))
-    random.shuffle(data)
-    split_idx = int(len(data) * p)
-    train_data = data[:split_idx]
-    test_data = data[split_idx:]
-    
-    x_train = [point for point, label in train_data]
-    y_train = [label for point, label in train_data]
-    x_test = [point for point, label in test_data]
-    y_test = [label for point, label in test_data]
-    
-    return x_train, x_test, y_train, y_test
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
-def fit(x_train, y_train, x_test, k=3):
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(x_train, y_train)
 
-    knn = KNeighborsClassifier(n_neighbors=k)
-    knn.fit(x_train, y_train)
-    y_predict = knn.predict(x_test)
-    return y_predict
+y_predict = knn.predict(x_test)
 
-def compute_accuracy(y_test, y_predict):
+accuracy = accuracy_score(y_test, y_predict)
+print(f'Accuracy: {accuracy:.2f}')
 
-    return accuracy_score(y_test, y_predict)
+def visualize(x_train, y_train, x_test, y_test, y_predict):
+    plt.figure(figsize=(8, 6))
 
-def visualize_results(x_train, y_train, x_test, y_test, y_predict):
+    for i, point in enumerate(x_train):
+        marker = 'o' if y_train[i] == 0 else 'x'
+        plt.scatter(point[0], point[1], color='blue', marker=marker, alpha=0.5)
 
-    x_train = np.array(x_train)
-    x_test = np.array(x_test)
-    y_train = np.array(y_train)
-    y_test = np.array(y_test)
-    y_predict = np.array(y_predict)
-    
-    plt.figure(figsize=(10, 8))
+    for i, point in enumerate(x_test):
+        if y_test[i] == y_predict[i]:
+            color = 'green' 
+        else:
+            color = 'red'  
+        marker = 'o' if y_test[i] == 0 else 'x'
+        plt.scatter(point[0], point[1], color=color, marker=marker,
+                    edgecolor='black', s=100, linewidths=1)
 
-    mask_train0 = y_train == 0
-    plt.scatter(x_train[mask_train0, 0], x_train[mask_train0, 1], c='blue', marker='o', label='Train Class 0')
-
-    mask_train1 = y_train == 1
-    plt.scatter(x_train[mask_train1, 0], x_train[mask_train1, 1], c='blue', marker='x', label='Train Class 1')
-
-    correct_mask = y_test == y_predict
-    x_test_correct = x_test[correct_mask]
-    y_test_correct = y_test[correct_mask]
-
-    mask_correct0 = y_test_correct == 0
-    plt.scatter(x_test_correct[mask_correct0, 0], x_test_correct[mask_correct0, 1], 
-                c='green', marker='o', label='Correct Class 0')
-
-    mask_correct1 = y_test_correct == 1
-    plt.scatter(x_test_correct[mask_correct1, 0], x_test_correct[mask_correct1, 1], 
-                c='green', marker='x', label='Correct Class 1')
-
-    incorrect_mask = y_test != y_predict
-    x_test_incorrect = x_test[incorrect_mask]
-    y_test_incorrect = y_test[incorrect_mask]
-
-    mask_incorrect0 = y_test_incorrect == 0
-    plt.scatter(x_test_incorrect[mask_incorrect0, 0], x_test_incorrect[mask_incorrect0, 1], 
-                c='red', marker='o', label='Incorrect Class 0')
-
-mask_incorrect1 = y_test_incorrect == 1
-    plt.scatter(x_test_incorrect[mask_incorrect1, 0], x_test_incorrect[mask_incorrect1, 1], 
-                c='red', marker='x', label='Incorrect Class 1')
-    
-    plt.xlabel('X coordinate')
-    plt.ylabel('Y coordinate')
-    plt.title('KNN Classification Results')
-    plt.legend()
-    plt.grid(True)
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Метод k ближайших соседей (sklearn)')
     plt.show()
 
-if name == "main":
 
-    pointsCount1 = 50
-    pointsCount2 = 50
-    k = 3
-    p = 0.8
-
-    x, y = generate_data(pointsCount1, pointsCount2)
-
-    x_train, x_test, y_train, y_test = custom_train_test_split(x, y, p)
-
-    y_predict = fit(x_train, y_train, x_test, k)
-
-    accuracy = compute_accuracy(y_test, y_predict)
-    print(f"Accuracy: {accuracy:.2f}")
-
-    visualize_results(x_train, y_train, x_test, y_test, y_predict)
+visualize(x_train, y_train, x_test, y_test, y_predict)
