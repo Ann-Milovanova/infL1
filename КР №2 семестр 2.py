@@ -92,3 +92,4 @@ for i in range(len(svm_grid.best_estimator_.coef_)):
 ax3.set_title("SVM с полными гиперплоскостями")
 plt.tight_layout()
 plt.show()
+#Графики к работе будут в файле "графики к кр№2 (2 семестр)"
